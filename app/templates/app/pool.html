@@ -1,0 +1,305 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+<h2>Отзывы</h2>
+<h3>{{ message }}</h3>
+
+{% if submitted %}
+    <div class="alert alert-success">
+        <h4>Спасибо за ваш отзыв!</h4>
+        <p>Мы ценим ваше мнение и учтем его при дальнейшем развитии нашего сайта.</p>
+    </div>
+    
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Ваш отзыв</h3>
+        </div>
+        <div class="panel-body">
+            <dl class="dl-horizontal">
+                <dt>Имя:</dt>
+                <dd>{{ submitted_data.name }}</dd>
+                
+                <dt>Email:</dt>
+                <dd>{{ submitted_data.email }}</dd>
+                
+                <dt>Общая оценка сайта:</dt>
+                <dd>{{ submitted_data.site_rating }} - {{ submitted_data.site_rating_text }}</dd>
+                
+                <dt>Удобство использования:</dt>
+                <dd>{{ submitted_data.usability_rating }} - {{ submitted_data.usability_rating_text }}</dd>
+                
+                <dt>Дизайн сайта:</dt>
+                <dd>{{ submitted_data.design_rating }} - {{ submitted_data.design_rating_text }}</dd>
+                
+                <dt>Понравившиеся функции:</dt>
+                <dd>
+                    {% if submitted_data.liked_features %}
+                        <ul>
+                            {% for feature in submitted_data.liked_features_text %}
+                                <li>{{ feature }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        Не указано
+                    {% endif %}
+                </dd>
+                
+                <dt>Частота посещений:</dt>
+                <dd>{{ submitted_data.visit_frequency_text }}</dd>
+                
+                <dt>Комментарии:</dt>
+                <dd>
+                    {% if submitted_data.feedback_text %}
+                        {{ submitted_data.feedback_text }}
+                    {% else %}
+                        Не указано
+                    {% endif %}
+                </dd>
+                
+                <dt>Подписка на новости:</dt>
+                <dd>
+                    {% if submitted_data.subscribe_news %}
+                        Да
+                    {% else %}
+                        Нет
+                    {% endif %}
+                </dd>
+            </dl>
+        </div>
+    </div>
+    
+    <p>
+        <a href="{% url 'pool' %}" class="btn btn-primary">Оставить еще один отзыв</a>
+    </p>
+{% else %}
+    <div class="row">
+        <div class="col-md-8">
+            <form method="post" class="form-horizontal">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="{{ form.name.id_for_label }}" class="col-md-3 control-label">{{ form.name.label }}</label>
+                    <div class="col-md-9">
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <span class="text-danger">{{ form.name.errors }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.email.id_for_label }}" class="col-md-3 control-label">{{ form.email.label }}</label>
+                    <div class="col-md-9">
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <span class="text-danger">{{ form.email.errors }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ form.site_rating.label }}</label>
+                    <div class="col-md-9">
+                        <div class="radio">
+                            {% for radio in form.site_rating %}
+                                <label>
+                                    {{ radio.tag }}
+                                    {{ radio.choice_label }}
+                                </label><br>
+                            {% endfor %}
+                        </div>
+                        {% if form.site_rating.errors %}
+                            <span class="text-danger">{{ form.site_rating.errors }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.usability_rating.id_for_label }}" class="col-md-3 control-label">{{ form.usability_rating.label }}</label>
+                    <div class="col-md-9">
+                        {{ form.usability_rating }}
+                        {% if form.usability_rating.errors %}
+                            <span class="text-danger">{{ form.usability_rating.errors }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.design_rating.id_for_label }}" class="col-md-3 control-label">{{ form.design_rating.label }}</label>
+                    <div class="col-md-9">
+                        {{ form.design_rating }}
+                        {% if form.design_rating.errors %}
+                            <span class="text-danger">{{ form.design_rating.errors }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="col-md-3 control-label">{{ form.liked_features.label }}</label>
+                    <div class="col-md-9">
+                        {% for checkbox in form.liked_features %}
+                            <div class="checkbox">
+                                <label>
+                                    {{ checkbox.tag }}
+                                    {{ checkbox.choice_label }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                        {% if form.liked_features.errors %}
+                            <span class="text-danger">{{ form.liked_features.errors }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.visit_frequency.id_for_label }}" class="col-md-3 control-label">{{ form.visit_frequency.label }}</label>
+                    <div class="col-md-9">
+                        {{ form.visit_frequency }}
+                        {% if form.visit_frequency.errors %}
+                            <span class="text-danger">{{ form.visit_frequency.errors }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.feedback_text.id_for_label }}" class="col-md-3 control-label">{{ form.feedback_text.label }}</label>
+                    <div class="col-md-9">
+                        {{ form.feedback_text }}
+                        {% if form.feedback_text.errors %}
+                            <span class="text-danger">{{ form.feedback_text.errors }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-9">
+                        <div class="checkbox">
+                            <label>
+                                {{ form.subscribe_news }}
+                                {{ form.subscribe_news.label }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-9">
+                        <button type="submit" class="btn btn-primary">Отправить отзыв</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Почему важны ваши отзывы</h3>
+                </div>
+                <div class="panel-body">
+                    <p>Ваше мнение помогает нам улучшать наш сайт и сервис. Мы внимательно изучаем каждый отзыв и учитываем ваши пожелания при разработке новых функций.</p>
+                    <p>Спасибо, что помогаете нам становиться лучше!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        $('#id_site_rating_0').attr('id', 'rating_very_bad');
+        $('#id_site_rating_1').attr('id', 'rating_bad');
+        $('#id_site_rating_2').attr('id', 'rating_ok');
+        $('#id_site_rating_3').attr('id', 'rating_good');
+        $('#id_site_rating_4').attr('id', 'rating_excellent');
+        
+        function updateRatingStyle() {
+            // sbros
+            $('input[name="site_rating"]').parent().css('font-weight', 'normal');
+            $('input[name="site_rating"]').parent().css('color', '#333');
+            
+            // tekushaya
+            $('input[name="site_rating"]:checked').parent().css('font-weight', 'bold');
+            
+            // menyaem
+            var rating = $('input[name="site_rating"]:checked').val();
+            var color = '#333';
+            
+            if (rating == '1') color = '#d9534f'; // red
+            else if (rating == '2') color = '#f0ad4e'; // orange
+            else if (rating == '3') color = '#5bc0de'; // goluboy
+            else if (rating == '4') color = '#5cb85c'; // green
+            else if (rating == '5') color = '#337ab7'; // blue
+            
+            $('input[name="site_rating"]:checked').parent().css('color', color);
+        }
+        
+        updateRatingStyle();
+        
+        $('input[name="site_rating"]').change(function() {
+            updateRatingStyle();
+        });
+        
+        $('#id_visit_frequency').change(function() {
+            var frequency = $(this).val();
+            
+            if (frequency == 'first_time') {
+                $('#id_usability_rating').parent().parent().fadeOut();
+                $('#id_design_rating').parent().parent().fadeOut();
+                $('#id_liked_features').parent().parent().parent().fadeOut();
+            } else {
+                $('#id_usability_rating').parent().parent().fadeIn();
+                $('#id_design_rating').parent().parent().fadeIn();
+                $('#id_liked_features').parent().parent().parent().fadeIn();
+            }
+        });
+        
+        $('#id_visit_frequency').trigger('change');
+        
+        $('form input, form textarea, form select').on('input change', function() {
+            var filledFields = 0;
+            var totalRequiredFields = 3; // имя, email, общая оценка
+            
+            if ($('#id_name').val()) filledFields++;
+            if ($('#id_email').val()) filledFields++;
+            if ($('input[name="site_rating"]:checked').length) filledFields++;
+            
+            var progress = Math.round((filledFields / totalRequiredFields) * 100);
+            
+            if (progress < 100) {
+                $('button[type="submit"]').text('Заполнено на ' + progress + '%');
+            } else {
+                $('button[type="submit"]').text('Отправить отзыв');
+                $('button[type="submit"]').addClass('btn-success').removeClass('btn-primary');
+            }
+        });
+        
+        $('form input, form textarea, form select').focus(function() {
+            $(this).css('box-shadow', '0 0 5px rgba(81, 203, 238, 1)');
+        });
+        
+        $('form input, form textarea, form select').blur(function() {
+            $(this).css('box-shadow', 'none');
+        });
+        
+        // valid email 
+        $('#id_email').on('input', function() {
+            var email = $(this).val();
+            var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            
+            if (email && !emailRegex.test(email)) {
+                $(this).css('border-color', '#d9534f');
+                if (!$(this).next('.email-error').length) {
+                    $(this).after('<p class="email-error text-danger">Пожалуйста, введите корректный email</p>');
+                }
+            } else {
+                $(this).css('border-color', '');
+                $(this).next('.email-error').remove();
+            }
+        });
+    });
+</script>
+{% endblock %}

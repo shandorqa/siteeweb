@@ -1,0 +1,82 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+<h2>Контакты</h2>
+<h3>Свяжитесь с нами для бронирования тура или получения консультации</h3>
+
+<address>
+    Туристическое агентство "Мир путешествий"<br />
+    ул. Туристическая, д. 123, офис 45<br />
+    г. Москва, 123456<br />
+    <abbr title="Телефон">Тел:</abbr> +7 (495) 123-45-67
+</address>
+
+<address>
+    <strong>Отдел продаж:</strong> <a href="mailto:sales@mirputeshestviy.ru">sales@mirputeshestviy.ru</a><br />
+    <strong>Служба поддержки:</strong> <a href="mailto:support@mirputeshestviy.ru">support@mirputeshestviy.ru</a>
+</address>
+
+<h3>Часы работы</h3>
+<p>Понедельник - Пятница: 9:00 - 20:00<br />
+Суббота: 10:00 - 18:00<br />
+Воскресенье: выходной</p>
+
+<h3>Как нас найти</h3>
+<p>Мы находимся в 5 минутах ходьбы от станции метро "Туристическая".</p>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <h3>Напишите нам</h3>
+        
+        {% if submitted %}
+            <div class="alert alert-success">
+                Спасибо за ваше сообщение! Мы свяжемся с вами в ближайшее время.
+            </div>
+        {% else %}
+            <form method="post" class="form-horizontal">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="{{ form.name.id_for_label }}" class="col-md-3 control-label">{{ form.name.label }}</label>
+                    <div class="col-md-9">
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <span class="text-danger">{{ form.name.errors }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.email.id_for_label }}" class="col-md-3 control-label">{{ form.email.label }}</label>
+                    <div class="col-md-9">
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <span class="text-danger">{{ form.email.errors }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.message.id_for_label }}" class="col-md-3 control-label">{{ form.message.label }}</label>
+                    <div class="col-md-9">
+                        {{ form.message }}
+                        {% if form.message.errors %}
+                            <span class="text-danger">{{ form.message.errors }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-9">
+                        <button type="submit" class="btn btn-primary">Отправить</button>
+                    </div>
+                </div>
+            </form>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

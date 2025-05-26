@@ -1,0 +1,28 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+<h2>Регистрация</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <section id="registrationForm">
+            <form action="{% url 'registration' %}" method="post" class="form-horizontal">
+                {% csrf_token %}
+                <hr />
+                {{ regform }}
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Зарегистрироваться" class="btn btn-primary" />
+                    </div>
+                </div>
+                {% if regform.errors %}
+                <div class="alert alert-danger">
+                    <strong>Ошибка!</strong> Пожалуйста, исправьте следующие ошибки:
+                    {{ regform.errors }}
+                </div>
+                {% endif %}
+            </form>
+        </section>
+    </div>
+</div>
+{% endblock %} 
