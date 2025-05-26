@@ -5,7 +5,7 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpRequest
-from app.forms import ContactForm, FeedbackForm, RegistrationForm, CommentForm
+from app.forms import ContactForm, FeedbackForm, RegistrationForm, CommentForm, BlogForm
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from app.models import Blog, Comment
@@ -230,3 +230,23 @@ def blogpost(request, parameter):
             'year': datetime.now().year,
         }
     )
+
+def newpost(request):
+    if not request.user.is_superuser:
+        return redirect('home')
+    if request.method == "POST":
+        form = BlogForm(request.POST, request.FILES)
+        if form.is_valid():
+            blog = form.save(commit=False)
+            blog.author = request.user
+            blog.save()
+            return redirect('blog')
+    else:
+        form = BlogForm()
+    return render(request, 'app/newpost.html', {'form': form, 'title': 'Добавить статью', 'year': datetime.now().year})
+
+def videopost(request):
+    return render(request, 'app/videopost.html', {
+        'title': 'Видео',
+        'year': datetime.now().year,
+    })

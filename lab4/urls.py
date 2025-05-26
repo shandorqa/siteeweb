@@ -7,6 +7,8 @@ from django.urls import path
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 from app import forms, views
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -32,4 +34,9 @@ urlpatterns = [
     path('registration/', views.registration, name='registration'),
     path('blog/', views.blog, name='blog'),
     path('blog/<int:parameter>/', views.blogpost, name='blogpost'),
+    path('blog/new/', views.newpost, name='newpost'),
+    path('video/', views.videopost, name='videopost'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

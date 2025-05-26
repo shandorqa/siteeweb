@@ -2,6 +2,9 @@
 {% block content %}
     <h2>{{ post_1.title }}</h2>
     <p><em>{{ post_1.posted|date:"d.m.Y H:i" }}</em></p>
+    {% if post_1.image %}
+        <img src="{{ post_1.image.url }}" alt="Картинка статьи блога" style="max-width: 100%; height: auto; margin-bottom: 20px;"/>
+    {% endif %}
     <div>{{ post_1.content }}</div>
     <p><a href="{% url 'blog' %}">← К списку статей</a></p>
 

@@ -1,0 +1,10 @@
+{% extends 'app/layout.html' %}
+
+{% block content %}
+<h2>Добавить новую статью</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Добавить</button>
+</form>
+{% endblock %} 
